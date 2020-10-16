@@ -48,7 +48,7 @@ def webhook():
     channel = Channel.query.filter_by(name=project_name).first()
     if channel:
         channel.count = 1 if channel.count is None else (channel.count + 1)
-        db.session.comit()
+        db.session.commit()
 
         res = requests.post(channel.webhook,
                             json={"username": "sentry",
@@ -110,4 +110,4 @@ def delete_channel(id):
 
 if __name__ == "__main__":
     db.create_all()
-    app.run(debug=True, port=8080)
+    app.run(debug=True, host="0.0.0.0", port=8080)
