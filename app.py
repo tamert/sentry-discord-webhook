@@ -2,6 +2,8 @@ import os
 from flask import Flask, render_template, redirect, url_for, request, json
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from datetime import datetime
+import tzlocal
 import requests
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -42,21 +44,33 @@ def add_channel():
 def webhook():
     project_name = request.json.get("project_name")
     message = request.json.get("message")
-    culprit = request.json.get("culprit")
+    event = request.json.get("event")
     url = request.json.get("url")
-
     channel = Channel.query.filter_by(name=project_name).first()
     if channel:
         channel.count = 1 if channel.count is None else (channel.count + 1)
         db.session.commit()
 
+        unix_timestamp = float(event["timestamp"])
+        local_timezone = tzlocal.get_localzone()  # get pytz timezone
+        local_time = datetime.fromtimestamp(unix_timestamp, local_timezone)
         res = requests.post(channel.webhook,
                             json={"username": "sentry",
                                   "embeds": [
                                       {
-                                          "title": message,
-                                          "description": culprit,
-                                          "color": 15746887
+                                          "title": message if message else "Issue",
+                                          "description": event["title"],
+                                          "fields": [
+                                              {
+                                                  "name": "Location",
+                                                  "value": event["location"]
+                                              },
+                                              {
+                                                  "name": "Date",
+                                                  "value": str(local_time)
+                                              }
+                                          ],
+                                          "color": "15746887"
                                       }
                                   ],
                                   "content": "Visit issue: <%s>" % url
