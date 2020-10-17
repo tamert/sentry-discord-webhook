@@ -5,3 +5,4 @@ This is a basic Flask App that accepts an incoming Sentry webhook and transforms
 ![Screenshot](screen.png)
 
 
+![Screenshot](screen2.png)
