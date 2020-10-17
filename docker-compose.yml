@@ -3,9 +3,9 @@ services:
   web:
     build: .
     ports:
-      - "5000:5000"
+      - "8080:8080"
     environment:
-      - FLASK_APP=run.py
+      - FLASK_APP=app.py
       - FLASK_DEBUG=1
     volumes:
       - .:/app
