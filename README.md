@@ -1,4 +1,4 @@
-# sentry-discord-webhook
+# sentry-webhook for Slack and Discord 
 
 This is a basic Flask App that accepts an incoming Sentry webhook and transforms it to the format expected by Discord and Slack.
 
