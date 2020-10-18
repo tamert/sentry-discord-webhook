@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
+
+
 <div class="card">
 
     <div class="card-header">
@@ -8,10 +10,13 @@
     <div class="card-body">
         <label>Sentry Webhook</label>
         <div class="input-group">
-            <input type="text" id="webhook-clipboard" class="form-control"
-                   value="{{ url }}webhook/{{ channel.id }}">
+            <div id="webhook-clipboard" class="form-control"
+            >{{ url }}webhook/{{ channel.id }}
+            </div>
             <div class="input-group-append">
-                <button type="button" class="btn btn-info btn-clipboard" data-clipboard-action="copy"
+                <button type="button" class="btn btn-info copyButton btn-clipboard"
+                        data-id="@item.Type"
+                        data-clipboard-action="copy"
                         data-clipboard-target="#webhook-clipboard">Copy
                 </button>
             </div>
@@ -36,5 +41,18 @@
         </form>
     </div>
 </div>
+
+
+<script>
+        var clipboard = new Clipboard('.copyButton');
+
+        clipboard.on('success', function(e) {
+            $(".copyButton").text("Copied!");
+        });
+
+        clipboard.on('error', function(e) {
+        console.log(e);
+        });
+</script>
 
 {% endblock %}
