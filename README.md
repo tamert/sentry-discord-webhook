@@ -4,8 +4,19 @@ This is a basic Flask App that accepts an incoming Sentry webhook and transforms
 
 ![Screenshot](screen.png)
 
-#Slack
+# Slack
+Slack View
+
 ![Screenshot](screen2.png)
 
-#Discord
+# Discord
+Discord View
+
 ![Screenshot](screen3.png)
+
+# Setup
+
+````
+pip install -r requirements.txt
+
+python app.py
