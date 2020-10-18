@@ -2,61 +2,63 @@
 {% block body %}
 
 
-<div class="card">
+    <div class="card">
 
-    <div class="card-header">
-        Project : {{ channel.name }}
-    </div>
-    <div class="card-body">
-        <label>Sentry Webhook</label>
-        <div class="input-group">
-            <div id="webhook-clipboard" class="form-control"
-            >{{ url }}webhook/{{ channel.id }}
-            </div>
-            <div class="input-group-append">
-                <button type="button" class="btn btn-info copyButton btn-clipboard"
-                        data-id="@item.Type"
-                        data-clipboard-action="copy"
-                        data-clipboard-target="#webhook-clipboard">Copy
-                </button>
+        <div class="card-header">
+            Project : {{ channel.name }}
+        </div>
+        <div class="card-body">
+            <label>Sentry Webhook</label>
+            <div class="input-group">
+                <div id="webhook-clipboard" class="form-control"
+                >{{ url }}webhook/{{ channel.id }}
+                </div>
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-info copyButton btn-clipboard"
+                            data-id="@item.Type"
+                            data-clipboard-action="copy"
+                            data-clipboard-target="#webhook-clipboard">Copy
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+    <div class="card mt-4">
 
-    <div class="card-header">
-        <span>Edit</span>
+        <div class="card-header">
+            <span>Edit</span>
+        </div>
+        <div class="card-body">
+            <form action="/edit/{{ channel.id }}" method="post">
+                <label for="name">Project Name</label>
+                <input style="margin-bottom:5px" type="text" class="form-control" name="name"
+                       id="name"
+                       value="{{ channel.name }}"
+                       placeholder="Enter Name...">
+                <label class="mt-4" for="slack_webhook">Slack Webhook (Optional)</label>
+                <textarea name="slack_webhook" id="slack_webhook" class="form-control"
+                          placeholder="Enter Webhook...">{{ channel.slack_webhook }}</textarea>
+                <label class="mt-4" for="discord_webhook">Discord Webhook (Optional)</label>
+                <textarea name="discord_webhook" id="discord_webhook" class="form-control"
+                          placeholder="Enter Webhook...">{{ channel.discord_webhook }}</textarea>
+                <button type="submit" class="btn mt-4 btn-success">Update</button>
+            </form>
+        </div>
     </div>
-    <div class="card-body">
-        <form action="/edit/{{ channel.id }}" method="post">
-            <label for="name">Project Name</label>
-            <input style="margin-bottom:5px" type="text" class="form-control" name="name"
-                   id="name"
-                   value="{{ channel.name }}"
-                   placeholder="Enter Name...">
-            <label class="mt-4" for="slack_webhook">Slack Webhook (Optional)</label>
-            <textarea name="slack_webhook" id="slack_webhook" class="form-control"
-                      placeholder="Enter Webhook...">{{ channel.slack_webhook }}</textarea>
-            <label class="mt-4" for="discord_webhook">Discord Webhook (Optional)</label>
-            <textarea name="discord_webhook" id="discord_webhook" class="form-control"
-                      placeholder="Enter Webhook...">{{ channel.discord_webhook }}</textarea>
-            <button type="submit" class="btn mt-4 btn-success">Update</button>
-        </form>
-    </div>
-</div>
 
 
-<script>
+    <script>
         var clipboard = new Clipboard('.copyButton');
 
-        clipboard.on('success', function(e) {
+        clipboard.on('success', function (e) {
             $(".copyButton").text("Copied!");
         });
 
-        clipboard.on('error', function(e) {
-        console.log(e);
+        clipboard.on('error', function (e) {
+            console.log(e);
         });
 
 
-</script>
+    </script>
 
 {% endblock %}
