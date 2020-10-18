@@ -20,7 +20,8 @@ class Channel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     slug = db.Column(db.String(80))
-    webhook = db.Column(db.String(300))
+    slack_webhook = db.Column(db.String(300))
+    discord_webhook = db.Column(db.String(300))
     count = db.Column(db.Integer)
     user_id = db.Column(db.Integer)
     active = db.Column(db.Boolean)
@@ -50,8 +51,7 @@ def detail(id):
 @app.route("/add", methods=["POST"])
 def add_channel():
     name = request.form.get("name")
-    webhook = request.form.get("webhook")
-    new_channel = Channel(name=name, webhook=webhook, count=0, active=True)
+    new_channel = Channel(name=name, slack_webhook="", discord_webhook="", count=0, active=True)
     db.session.add(new_channel)
     db.session.commit()
 
@@ -81,46 +81,45 @@ def webhook(id):
         unix_timestamp = float(event["timestamp"])
         local_timezone = tzlocal.get_localzone()  # get pytz timezone
         local_time = datetime.fromtimestamp(unix_timestamp, local_timezone)
-        res = requests.post(channel.webhook,
-                            json={"username": "sentry",
-                                  "embeds": [
-                                      {
-                                          "title": title,
-                                          "description": event["title"],
-                                          "fields": [
-                                              {
-                                                  "name": "Location",
-                                                  "value": event["location"]
-                                              },
-                                              {
-                                                  "name": "Date",
-                                                  "value": str(local_time)
-                                              }
-                                          ],
-                                          "color": "15746887"
-                                      }
-                                  ],
-                                  "content": "Visit issue: <%s>" % url
-                                  }
-                            )
-        if res.ok:
-            return app.response_class(
-                response=json.dumps({
-                    "success": True,
-                    "message": "Channel added a new issue"
-                }),
-                status=200,
-                mimetype='application/json'
-            )
-        else:
-            return app.response_class(
-                response=json.dumps({
-                    "success": False,
-                    "message": "Request webhook failed"
-                }),
-                status=400,
-                mimetype='application/json'
-            )
+
+        if channel.slack_webhook:
+            requests.post(channel.slack_webhook,
+                          json={"username": "sentry",
+                                "embeds": [
+                                    {
+                                        "title": title,
+                                        "description": event["title"],
+                                        "fields": [
+                                            {
+                                                "name": "Location",
+                                                "value": event["location"]
+                                            },
+                                            {
+                                                "name": "Date",
+                                                "value": str(local_time)
+                                            }
+                                        ],
+                                        "color": "15746887"
+                                    }
+                                ],
+                                "content": "Visit issue: <%s>" % url
+                                }
+                          )
+
+        if channel.discord_webhook:
+            requests.post(channel.discord_webhook,
+                          json={
+                              "text": "%s \n%s \nDate: %s \nVisit: %s" % (title, event["title"], str(local_time), url)}
+                          )
+
+        return app.response_class(
+            response=json.dumps({
+                "success": True,
+                "message": "Channel added a new issue"
+            }),
+            status=200,
+            mimetype='application/json'
+        )
 
     else:
         return app.response_class(
@@ -145,9 +144,11 @@ def active_channel(id):
 def edit(id):
     channel = Channel.query.filter_by(id=id).first()
     name = request.form.get("name")
-    webhook = request.form.get("webhook")
+    discord_webhook = request.form.get("discord_webhook")
+    slack_webhook = request.form.get("slack_webhook")
     channel.name = name
-    channel.webhook = webhook
+    channel.discord_webhook = discord_webhook
+    channel.slack_webhook = slack_webhook
     db.session.commit()
     return redirect(url_for("detail", id=channel.id))
 

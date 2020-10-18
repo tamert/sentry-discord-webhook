@@ -23,21 +23,23 @@
         </div>
     </div>
 
+    <div class="card-header">
+        <span>Edit</span>
+    </div>
     <div class="card-body">
-        <label>Edit</label>
         <form action="/edit/{{ channel.id }}" method="post">
-            <div class="form-group">
-                <label for="name">Project Name</label>
-                <input style="margin-bottom:5px" type="text" class="form-control" name="name"
-                       id="name"
-                       value="{{ channel.name }}"
-                       placeholder="Enter Name...">
-                <label for="webhook">Discord Webhook</label>
-                <textarea name="webhook" id="webhook" class="form-control"
-                          placeholder="Enter Webhook...">{{ channel.webhook }}</textarea>
-                <button type="submit" class="btn mt-2 btn-success">Edit</button>
-            </div>
-            <hr>
+            <label for="name">Project Name</label>
+            <input style="margin-bottom:5px" type="text" class="form-control" name="name"
+                   id="name"
+                   value="{{ channel.name }}"
+                   placeholder="Enter Name...">
+            <label class="mt-4" for="slack_webhook">Slack Webhook (Optional)</label>
+            <textarea name="slack_webhook" id="slack_webhook" class="form-control"
+                      placeholder="Enter Webhook...">{{ channel.slack_webhook }}</textarea>
+            <label class="mt-4" for="discord_webhook">Discord Webhook (Optional)</label>
+            <textarea name="discord_webhook" id="discord_webhook" class="form-control"
+                      placeholder="Enter Webhook...">{{ channel.discord_webhook }}</textarea>
+            <button type="submit" class="btn mt-4 btn-success">Update</button>
         </form>
     </div>
 </div>
@@ -53,6 +55,8 @@
         clipboard.on('error', function(e) {
         console.log(e);
         });
+
+
 </script>
 
 {% endblock %}
