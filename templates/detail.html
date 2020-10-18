@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="card">
+
+    <div class="card-header">
+        Project : {{ channel.name }}
+    </div>
+    <div class="card-body">
+        <label>Sentry Webhook</label>
+        <div class="input-group">
+            <input type="text" id="webhook-clipboard" class="form-control"
+                   value="{{ url }}webhook/{{ channel.id }}">
+            <div class="input-group-append">
+                <button type="button" class="btn btn-info btn-clipboard" data-clipboard-action="copy"
+                        data-clipboard-target="#webhook-clipboard">Copy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <label>Edit</label>
+        <form action="/edit/{{ channel.id }}" method="post">
+            <div class="form-group">
+                <label for="name">Project Name</label>
+                <input style="margin-bottom:5px" type="text" class="form-control" name="name"
+                       id="name"
+                       value="{{ channel.name }}"
+                       placeholder="Enter Name...">
+                <label for="webhook">Discord Webhook</label>
+                <textarea name="webhook" id="webhook" class="form-control"
+                          placeholder="Enter Webhook...">{{ channel.webhook }}</textarea>
+                <button type="submit" class="btn mt-2 btn-success">Edit</button>
+            </div>
+            <hr>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
