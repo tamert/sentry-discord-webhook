@@ -82,35 +82,29 @@ def webhook(id):
         local_timezone = tzlocal.get_localzone()  # get pytz timezone
         local_time = datetime.fromtimestamp(unix_timestamp, local_timezone)
 
-        if channel.slack_webhook:
-            requests.post(channel.slack_webhook,
-                          json={"username": "sentry",
-                                "embeds": [
-                                    {
-                                        "title": title,
-                                        "description": event["title"],
-                                        "fields": [
-                                            {
-                                                "name": "Location",
-                                                "value": event["location"]
-                                            },
-                                            {
-                                                "name": "Date",
-                                                "value": str(local_time)
-                                            }
-                                        ],
-                                        "color": "15746887"
-                                    }
-                                ],
-                                "content": "Visit issue: <%s>" % url
-                                }
-                          )
-
         if channel.discord_webhook:
-            requests.post(channel.discord_webhook,
-                          json={
-                              "text": "%s \n%s \nDate: %s \nVisit: %s" % (title, event["title"], str(local_time), url)}
-                          )
+            data = {"username": "sentry",
+                    "content": ":loudspeaker: Issue Alert",
+                    "embeds": [
+                        {
+                            "title": title,
+                            "description": event["title"],
+                            "timestamp": str(local_time),
+                            "url": url,
+                            "color": 14177041
+                        }
+                    ]
+                    }
+            r = requests.post(channel.discord_webhook, json=data)
+            print(r.text)
+
+        if channel.slack_webhook:
+            r = requests.post(channel.slack_webhook,
+                              json={
+                                  "text": "%s \n%s \nDate: %s \nVisit: %s" % (
+                                      title, event["title"], str(local_time), url)}
+                              )
+            print(r.status_code)
 
         return app.response_class(
             response=json.dumps({
