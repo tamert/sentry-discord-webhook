@@ -21,3 +21,6 @@ flask-migrate
 marshmallow-sqlalchemy
 requests
 tzlocal
+flask-login
+Flask-Seeder
+hashids

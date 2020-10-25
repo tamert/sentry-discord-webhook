@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout/layout.html" %}
 {% block body %}
     <div class="row">
 
@@ -11,6 +11,7 @@
                         <div class="input-group">
                             <input type="text" class="form-control" name="name"
                                    id="formGroupExampleInput"
+                                   required
                                    placeholder="Enter Project Name...">
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-success">Add</button>
@@ -39,6 +40,7 @@
                                 <th scope="col" class="text-center">ID</th>
                                 <th scope="col" width="60%">Project Name</th>
                                 <th scope="col">Is Active?</th>
+                                <th scope="col">Created By</th>
                                 <th scope="col">Issue Count</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -59,6 +61,10 @@
                                             <a href="/active/{{ i.id }}" class="btn btn-link btn-sm"><i
                                                     class="fa fa-check"></i></a>
                                         {% endif %}
+                                    </td>
+
+                                    <td>
+                                        <a href="/user/{{ i.user.id }}" >{{ i.user.name }}</a>
                                     </td>
 
                                     <td>{{ i.count }}</td>

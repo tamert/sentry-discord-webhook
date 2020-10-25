@@ -1,0 +1,59 @@
+{% extends "layout/login.html" %}
+
+
+{% block body %}
+
+    <div class="container">
+
+
+        <form action="/login" class="pr-4 pl-4" method="post">
+
+            <div class="row">
+                <div class="col-md-3">
+
+                </div>
+                <div class="col-md-6">
+
+                    <div class="row">
+                        <div class="col-md-1 p-0 text-center bg-info">
+                                    <span class="fa-stack fa-1x mt-2 fa-sm">
+                                      <i class="fa fa-square text-info fa-stack-2x"></i>
+                                      <i class="fa fa-bug fa-stack-1x fa-inverse"></i>
+                                    </span>
+                        </div>
+                        <div class="col-md-11 p-0">
+                            <div class="card border-info" style="border-radius: unset">
+                                <div class="card-body">
+                                    <h1 class="h3 mb-4 mt-2 font-weight-normal">Please sign in</h1>
+                                    <label for="inputEmail" class="sr-only">Email address</label>
+                                    <input type="email" name="email" id="inputEmail" class="mb-2 form-control"
+                                           placeholder="Email address"
+                                           required=""
+                                           autofocus="">
+                                    <label for="inputPassword" class="sr-only">Password</label>
+                                    <input type="password" name="password" id="inputPassword" class="mb-2 form-control"
+                                           placeholder="Password"
+                                           required="">
+                                    <div class="checkbox mb-3">
+                                        <label>
+                                            <input type="checkbox" name="remember" value="1"> Remember me
+                                        </label>
+                                    </div>
+                                    <button class="btn btn-sm bt-3 bm-3 btn-primary" type="submit">Sign in</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+
+
+{% endblock %}

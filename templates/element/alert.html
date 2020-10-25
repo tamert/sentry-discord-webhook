@@ -1,0 +1,27 @@
+{% macro alert_top() %}
+{% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="toast" data-delay="2002" style="position: absolute; z-index: 9999; top: 5em; right: 1em;">
+
+                <div class="toast-body bg-{{ message[0] }} text-white">
+
+                    {{ message[1] }}
+                    <button type="button" style="margin-top: -3px;" class="ml-2 pt-0 text-white close" data-dismiss="toast"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+{% endmacro %}
+
+{% macro alert_script() %}
+<script>
+    $(document).ready(function () {
+        $('.toast').toast('show');
+    });
+</script>
+{% endmacro %}
