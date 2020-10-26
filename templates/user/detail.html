@@ -1,0 +1,58 @@
+{% extends "layout/layout.html" %}
+{% block body %}
+
+    <div class="content pb-4">
+
+        <div class="card mt-4">
+
+            <div class="card-header">
+                <span>Edit</span>
+            </div>
+            <div class="card-body">
+                <form action="/user/edit/{{ user.id }}" name="user-edit" method="post">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name"
+                               id="name"
+                               required
+                               value="{{ user.name }}"
+                               placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Password</label>
+                        <input type="password" class="form-control" name="password"
+                               id="name"
+                               required
+                               placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-Mail</label>
+                        <input type="email" class="form-control" name="email"
+                               id="email"
+                               value="{{ user.email }}"
+                               required
+                               placeholder="Enter Name...">
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select class="form-control" name="role"
+                                id="role"
+                                required>
+                            <option {% if user.role == "normal" %}selected{% endif %} value="normal">Normal</option>
+                            <option {% if user.role == "admin" %}selected{% endif %} value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "layout/layout.html" %}
+{% block body %}
+    <div class="row">
+
+        <div class="col-md-12 mt-4">
+            {% if current_user.user.role == "admin" %}
+                <div class="text-right">
+                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#userAddModal">Add
+                        User
+                    </button>
+                </div>
+            {% endif %}
+            <div class="card mt-4">
+                <div class="card-header">Users List</div>
+                <div class="card-body p-0">
+                    {% if users == [] %}
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fas fa-exclamation"></i> &nbsp; You do not have any user. You can add your
+                            first
+                            user
+                            using
+                            the add
+                            button at the top.
+                        </div>
+                    {% else %}
+                        <table class="table mb-0 table-bordered table-sm">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="text-center">ID</th>
+                                <th scope="col" width="60%">User Name</th>
+                                <th scope="col">E-Mail</th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in users %}
+                                <tr>
+                                    <th scope="row" class="text-center">{{ i.id }}</th>
+                                    <td>{{ i.name }}</td>
+                                    <td>{{ i.email }}</td>
+                                    <td>{{ i.role }}</td>
+
+                                    <td class="text-right">
+                                        {% if current_user.user.id != i.id %}
+                                            <a href="/user/delete/{{ i.id }}"
+                                               onclick="return confirm('Are you sure?')"
+                                               class="btn btn-sm btn-light"><i
+                                                    class="fas fa-trash-alt"></i> Delete</a>
+                                        {% endif %}
+                                        <a href="/user/detail/{{ i.id }}"
+                                           class="btn btn-sm btn-light"><i
+                                                class="fas fa-search"></i> Detail</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="userAddModal" tabindex="-1" role="dialog" aria-labelledby="userAddModalTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userAddModalTitle">New User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form action="/user/add" name="form-add" method="post">
+
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" name="name"
+                                   id="name"
+                                   required
+                                   placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Password</label>
+                            <input type="password" class="form-control" name="password"
+                                   id="name"
+                                   required
+                                   placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-Mail</label>
+                            <input type="email" class="form-control" name="email"
+                                   id="email"
+                                   required
+                                   placeholder="Enter Name...">
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select class="form-control" name="role"
+                                    id="role"
+                                    required>
+                                <option value="normal">Normal</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

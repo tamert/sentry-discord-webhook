@@ -1,5 +1,6 @@
 from flask_seeder import Seeder, Faker, generator
 from models import User
+import hashlib
 
 
 class UserSeeder(Seeder):
@@ -13,7 +14,7 @@ class UserSeeder(Seeder):
                 "id": generator.Sequence(),
                 "name": generator.Name(),
                 "email": "admin@admin.com",
-                "password": "secret",
+                "password": hashlib.md5("secret"),
                 "role": "admin"
             }
         )
